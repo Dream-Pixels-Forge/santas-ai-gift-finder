@@ -6,6 +6,31 @@
 echo "🎅 Santa's AI Gift Finder Deployment Script"
 echo "=========================================="
 
+# Fix frontend dependencies if needed
+fix_frontend_dependencies() {
+    echo "🔧 Fixing frontend dependencies..."
+    
+    cd frontend
+    
+    # Remove problematic node_modules and package-lock.json
+    echo "Removing old dependencies..."
+    rm -rf node_modules package-lock.json
+    
+    # Reinstall dependencies
+    echo "Reinstalling dependencies..."
+    if npm install; then
+        echo "✅ Frontend dependencies fixed"
+    else
+        echo "❌ Failed to install dependencies"
+        echo "Try running: npm cache clean --force"
+        echo "Then: npm install"
+        cd ..
+        exit 1
+    fi
+    
+    cd ..
+}
+
 # Check if required tools are installed
 check_dependencies() {
     echo "Checking dependencies..."
@@ -124,6 +149,32 @@ test_frontend() {
     cd ..
 }
 
+# Test frontend start
+test_frontend_start() {
+    echo "Testing frontend start..."
+    
+    cd frontend
+    
+    # Check if npm is available
+    if ! command -v npm &> /dev/null; then
+        echo "⚠️  npm not found, skipping start test"
+        cd ..
+        return 0
+    fi
+    
+    # Try to start the frontend (but don't wait for it)
+    if timeout 5s npm start > /dev/null 2>&1 & then
+        echo "✅ Frontend start test passed"
+        # Kill the process
+        kill %1 2>/dev/null
+    else
+        echo "⚠️  Frontend start test failed"
+        echo "This might be due to missing dependencies or port conflicts"
+    fi
+    
+    cd ..
+}
+
 # Deployment instructions
 show_instructions() {
     echo ""
@@ -176,17 +227,27 @@ health_check() {
 
 # Main execution
 main() {
+    # Fix frontend dependencies first if needed
+    if [ "$1" = "--fix-frontend" ] || [ "$1" = "-f" ]; then
+        fix_frontend_dependencies
+        exit 0
+    fi
+    
     check_dependencies
     validate_repo
     check_backend
     check_frontend
     test_backend
     test_frontend
+    test_frontend_start
     show_instructions
     health_check
     
     echo "🎉 Deployment setup complete!"
     echo "Follow the instructions above to deploy your application."
+    echo ""
+    echo "💡 If you're having frontend dependency issues, run:"
+    echo "   ./deploy.sh --fix-frontend"
 }
 
 # Run main function

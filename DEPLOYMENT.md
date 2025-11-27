@@ -15,6 +15,20 @@ This guide will help you deploy the Santa's AI Gift Finder application to Vercel
 2. Git repository (GitHub, GitLab, or Bitbucket)
 3. Docker (optional, for local testing)
 
+## Quick Start
+
+```bash
+# Fix frontend dependencies (if needed)
+./fix_frontend.sh
+
+# Test locally
+cd frontend && npm start
+cd ../backend && python app.py
+
+# Deploy
+./deploy.sh
+```
+
 ## Backend Deployment on Render
 
 ### 1. Connect Repository
@@ -71,6 +85,25 @@ REACT_APP_API_URL=https://santas-ai-gift-finder-backend.onrender.com/api
 ### 4. Deploy
 Click "Deploy" and wait for the deployment to complete.
 
+## Frontend Dependency Issues - Quick Fix
+
+If you get `react-scripts: not found` error:
+
+```bash
+# Option 1: Use the fix script
+./fix_frontend.sh
+
+# Option 2: Manual fix
+cd frontend
+rm -rf node_modules package-lock.json
+npm cache clean --force
+npm install
+
+# Option 3: If still having issues
+npm install react-scripts@5.0.1 --save-dev
+npm install
+```
+
 ## Manual Deployment Commands
 
 ### Backend (Render)
@@ -114,6 +147,8 @@ REACT_APP_API_URL=https://your-backend-url.com/api
 2. **Frontend API calls failing**: Verify `REACT_APP_API_URL` is correct
 3. **Database connection errors**: Ensure DATABASE_URL is properly set
 4. **Model download failures**: Check if spaCy models download correctly during build
+5. **react-scripts not found**: Run `./fix_frontend.sh` or manual dependency fix
+6. **Build failures**: Check package.json dependencies and versions
 
 ### Debug Commands
 
@@ -126,6 +161,40 @@ npm run build --verbose
 
 # Test API locally
 curl http://localhost:5000/api/health
+
+# Check if react-scripts is working
+npx react-scripts --version
+```
+
+### Frontend Specific Issues
+
+**Error: "react-scripts: not found"**
+```bash
+# Clean install
+cd frontend
+rm -rf node_modules package-lock.json
+npm cache clean --force
+npm install
+
+# Verify installation
+ls node_modules/.bin/react-scripts
+npx react-scripts --version
+```
+
+**Error: "No such file or directory: 'react-scripts'"**
+```bash
+# Reinstall react-scripts specifically
+npm install react-scripts@5.0.1 --save-dev
+npm install
+```
+
+**Build fails with dependency errors**
+```bash
+# Use exact versions
+npm install --save-exact
+# Or try yarn
+npm install -g yarn
+yarn install
 ```
 
 ## Custom Domain Setup
@@ -163,3 +232,27 @@ curl http://localhost:5000/api/health
 2. Use HTTPS (automatic on Render/Vercel)
 3. Validate API inputs
 4. Rate limiting (consider adding)
+
+## Local Development
+
+### Start Backend
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate  # Linux/Mac
+# or .venv\Scripts\activate  # Windows
+pip install -r requirements.txt
+python app.py
+```
+
+### Start Frontend
+```bash
+cd frontend
+npm install
+npm start
+```
+
+### Docker Development
+```bash
+docker-compose up --build
+```
