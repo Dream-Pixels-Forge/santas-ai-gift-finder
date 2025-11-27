@@ -1,0 +1,205 @@
+/**
+ * GiftCard component styles
+ * Individual gift card layout and interactive elements
+ */
+
+.gift-card {
+  border: 1px solid var(--color-border-light);
+  border: 1px solid #eeeeee; /* Fallback */
+  border-radius: var(--radius-xl);
+  border-radius: 15px; /* Fallback */
+  padding: var(--spacing-lg);
+  padding: 1.5rem; /* Fallback */
+  background: var(--color-surface);
+  background: #ffffff; /* Fallback */
+  transition: box-shadow var(--transition-medium), transform var(--transition-medium);
+  transition: box-shadow 0.3s ease, transform 0.3s ease; /* Fallback */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.gift-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-5px);
+}
+
+.gift-card:focus-within {
+  box-shadow: 0 0 0 3px var(--color-focus);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3); /* Fallback */
+}
+
+.gift-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  border-radius: 10px; /* Fallback */
+  margin-bottom: var(--spacing-lg);
+  margin-bottom: 1.5rem; /* Fallback */
+  transition: transform var(--transition-fast);
+  transition: transform 0.2s ease; /* Fallback */
+}
+
+.gift-card:hover img {
+  transform: scale(1.02);
+}
+
+.gift-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-md);
+  margin-bottom: 1rem; /* Fallback */
+  color: var(--color-text-primary);
+  color: #333333; /* Fallback */
+  font-weight: 600;
+}
+
+.gift-card p {
+  color: var(--color-text-secondary);
+  color: #666666; /* Fallback */
+  margin-bottom: var(--spacing-lg);
+  margin-bottom: 1.5rem; /* Fallback */
+  flex-grow: 1;
+  line-height: 1.5;
+}
+
+/* Prices section */
+.gift-card .prices {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  gap: 0.5rem; /* Fallback */
+  margin: var(--spacing-lg) 0;
+  margin: 1.5rem 0; /* Fallback */
+}
+
+.gift-card .price-item {
+  background: var(--color-background);
+  background: #f8f9fa; /* Fallback */
+  padding: var(--spacing-md);
+  padding: 1rem; /* Fallback */
+  border-radius: var(--radius-md);
+  border-radius: 8px; /* Fallback */
+  min-width: 120px;
+  text-align: center;
+  transition: background-color var(--transition-fast);
+  transition: background-color 0.2s ease; /* Fallback */
+}
+
+.gift-card .price-item:hover {
+  background: #e9ecef;
+}
+
+.gift-card .price-item strong {
+  color: var(--color-primary);
+  color: #ff4757; /* Fallback */
+  font-size: 1.1rem;
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  margin-bottom: 0.25rem; /* Fallback */
+}
+
+.gift-card .price-item span {
+  color: var(--color-text-secondary);
+  color: #666666; /* Fallback */
+  font-size: 0.9rem;
+}
+
+/* Rating section */
+.gift-card .rating {
+  color: var(--color-warning);
+  color: #ffc107; /* Fallback */
+  font-weight: bold;
+  text-align: center;
+  margin: var(--spacing-md) 0;
+  margin: 1rem 0; /* Fallback */
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  gap: 0.25rem; /* Fallback */
+}
+
+/* Buy button */
+.gift-card .buy-btn {
+  width: 100%;
+  padding: var(--spacing-md);
+  padding: 1rem; /* Fallback */
+  background: var(--color-success);
+  background: #28a745; /* Fallback */
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  border-radius: 8px; /* Fallback */
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+  transition: background-color 0.2s ease, transform 0.2s ease; /* Fallback */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  gap: 0.5rem; /* Fallback */
+  margin-top: auto;
+}
+
+.gift-card .buy-btn:hover {
+  background: var(--color-success-hover);
+  background: #218838; /* Fallback */
+  transform: translateY(-2px);
+}
+
+.gift-card .buy-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-focus-success);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3); /* Fallback */
+}
+
+.gift-card .buy-btn:active {
+  transform: translateY(0);
+}
+
+/* Skeleton loading state */
+.gift-card.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Responsive design for GiftCard */
+@media (max-width: 768px) {
+  .gift-card {
+    padding: var(--spacing-md);
+  }
+  
+  .gift-card h3 {
+    font-size: 1.3rem;
+  }
+  
+  .gift-card .prices {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+  
+  .gift-card .price-item {
+    min-width: auto;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .gift-card {
+    padding: var(--spacing-md);
+  }
+}

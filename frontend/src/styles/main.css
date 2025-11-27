@@ -1,0 +1,50 @@
+/**
+ * Main stylesheet for Santa's AI Gift Finder
+ * Imports all modular CSS files in the correct order
+ */
+
+/* 1. CSS Variables and design tokens */
+@import './variables.css';
+
+/* 2. Base styles and utilities */
+@import './base.css';
+
+/* 3. Animations */
+@import './animations.css';
+
+/* 4. Component-scoped styles */
+@import './components/App.css';
+@import './components/SearchForm.css';
+@import './components/GiftCard.css';
+@import './components/Filters.css';
+@import './components/ResultList.css';
+@import './components/HeroSection.css';
+@import './components/Interactive3D.css';
+@import '../components/SkeletonCard.css';
+
+/* Landing page components */
+@import '../components/landing/Header.css';
+@import '../components/landing/HeroSection.css';
+@import '../components/landing/Interactive3D.css';
+@import '../components/landing/Footer.css';
+@import '../components/landing/LandingPage.css';
+
+/* Print styles for better printing experience */
+@media print {
+  body {
+    background: white;
+  }
+  
+  .app-header,
+  .filters,
+  .buy-btn {
+    display: none;
+  }
+  
+  .gift-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    border: 1px solid #ccc;
+    margin-bottom: 1rem;
+  }
+}

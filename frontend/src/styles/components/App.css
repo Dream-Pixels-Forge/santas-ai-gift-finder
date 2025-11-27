@@ -1,0 +1,86 @@
+/**
+ * App component styles
+ * Main application layout and header styles
+ */
+
+.app {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  min-height: 100vh;
+}
+
+.app-header {
+  text-align: center;
+  color: white;
+  margin-bottom: var(--spacing-2xl);
+  padding: var(--spacing-xl) 0;
+}
+
+.app-header h1 {
+  font-size: 3rem;
+  margin: 0;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.app-header .icon {
+  font-size: 4rem;
+  margin-bottom: var(--spacing-md);
+  display: inline-block;
+  animation: float 3s ease-in-out infinite;
+}
+
+.app-header p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  margin-top: var(--spacing-sm);
+}
+
+.app-main {
+  background: var(--color-surface);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-lg);
+  transition: transform var(--transition-medium);
+}
+
+.app-main:hover {
+  transform: translateY(-2px);
+}
+
+/* Floating animation for the snowflake icon */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Responsive design for App component */
+@media (max-width: 768px) {
+  .app {
+    padding: var(--spacing-md);
+  }
+  
+  .app-header h1 {
+    font-size: 2rem;
+  }
+  
+  .app-header .icon {
+    font-size: 3rem;
+  }
+  
+  .app-main {
+    padding: var(--spacing-md);
+    border-radius: var(--radius-xl);
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .app-header h1 {
+    font-size: 2.5rem;
+  }
+}

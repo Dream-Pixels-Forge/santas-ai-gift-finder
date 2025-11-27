@@ -2,10 +2,40 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#ff4757" />
   <title>Santa's AI Gift Finder 🎅</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+  <!-- Preload critical resources -->
+  <link rel="preload" href="%PUBLIC_URL%/images/hero-bg-00.jpg" as="image" />
+  <link rel="preload" href="%PUBLIC_URL%/images/hero-bg-01.jpg" as="image" />
+  <link rel="preload" href="%PUBLIC_URL%/images/hero-bg-02.jpg" as="image" />
+  <link rel="preload" href="%PUBLIC_URL%/3d_assets/christmas_gifts.glb" as="fetch" crossorigin />
+  <!-- WebGL Detection -->
+  <script>
+    (function() {
+      var canvas = document.createElement('canvas');
+      var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (gl && gl instanceof WebGLRenderingContext) {
+        document.documentElement.classList.add('webgl-supported');
+      } else {
+        document.documentElement.classList.add('webgl-unsupported');
+      }
+    })();
+  </script>
 </head>
 <body>
   <div id="root"></div>
+  <!-- Fallback for browsers without JavaScript -->
+  <noscript>
+    <div style="padding: 2rem; text-align: center; font-family: Arial, sans-serif;">
+      <h1>JavaScript Required</h1>
+      <p>Santa's AI Gift Finder requires JavaScript to function. Please enable JavaScript in your browser settings.</p>
+    </div>
+  </noscript>
 </body>
 </html>

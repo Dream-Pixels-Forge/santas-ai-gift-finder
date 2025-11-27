@@ -1,0 +1,120 @@
+/* Snowfall Animation */
+@keyframes snowfall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.snowfall-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.snowflake {
+  position: absolute;
+  color: white;
+  font-size: 1rem;
+  animation: snowfall 10s linear infinite;
+  opacity: 0.8;
+}
+
+/* Hero Slideshow Animation */
+@keyframes hero-fade-in {
+  0% {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.hero-slide {
+  animation: hero-fade-in 1s ease-in-out;
+}
+
+/* Parallax Animation */
+@keyframes parallax-move {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.parallax-element {
+  animation: parallax-move 6s ease-in-out infinite;
+}
+
+/* Parallax Background */
+.parallax-container {
+  position: relative;
+  overflow: hidden;
+  height: 100vh;
+}
+
+.parallax-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 120%;
+  z-index: -1;
+}
+
+.parallax-layer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+}
+
+.layer-1 {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transform: translateZ(0);
+}
+
+.layer-2 {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  transform: translateZ(-1px);
+  opacity: 0.7;
+}
+
+.layer-3 {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  transform: translateZ(-2px);
+  opacity: 0.5;
+}
+
+.parallax-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .snowfall-container,
+  .hero-slide,
+  .parallax-element,
+  .parallax-background {
+    animation: none;
+    transform: none !important;
+  }
+}

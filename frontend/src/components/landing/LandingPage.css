@@ -1,0 +1,31 @@
+/* Landing Page Container Styles */
+.landing-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.landing-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure proper spacing between sections */
+.landing-main > * {
+  flex-shrink: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .landing-page {
+    /* Adjust for mobile if needed */
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .landing-page {
+    /* No animations to reduce */
+  }
+}

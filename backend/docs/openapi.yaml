@@ -1,0 +1,818 @@
+openapi: 3.0.3
+info:
+  title: Santa's AI Gift Finder API
+  description: |
+    A comprehensive AI-powered gift recommendation API that uses natural language processing
+    to understand user queries and provide personalized gift suggestions.
+
+    ## Features
+    - **Natural Language Processing**: Advanced NLP for understanding gift queries
+    - **Personalized Recommendations**: AI-powered gift matching based on age, interests, and relationships
+    - **Price Comparison**: Real-time price comparison across retailers
+    - **Caching**: High-performance Redis caching for optimal response times
+    - **Rate Limiting**: Built-in rate limiting to prevent abuse
+    - **Monitoring**: Comprehensive logging and metrics collection
+
+    ## Authentication
+    All endpoints except `/api/health`, `/api/categories`, `/api/filters`, and asset endpoints
+    require JWT authentication. Include the token in the Authorization header:
+    ```
+    Authorization: Bearer <your_jwt_token>
+    ```
+  version: 1.0.0
+  contact:
+    name: Santa's AI Gift Finder Team
+    email: support@santas-gift-finder.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:5000
+    description: Development server
+  - url: https://api.santas-gift-finder.com
+    description: Production server
+
+security:
+  - bearerAuth: []
+
+paths:
+  /:
+    get:
+      summary: API Information
+      description: Get basic API information and available endpoints
+      tags:
+        - General
+      responses:
+        '200':
+          description: API information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Santa's AI Gift Finder API is running! 🎅"
+                  version:
+                    type: string
+                    example: "1.0.0"
+                  endpoints:
+                    type: object
+                    additionalProperties:
+                      type: string
+
+  /api/health:
+    get:
+      summary: Health Check
+      description: Comprehensive health check including database, Redis, and NLP service status
+      tags:
+        - Monitoring
+      responses:
+        '200':
+          description: Health status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /api/metrics:
+    get:
+      summary: Application Metrics
+      description: Get comprehensive application performance metrics
+      tags:
+        - Monitoring
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Metrics data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricsResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/auth/register:
+    post:
+      summary: User Registration
+      description: Register a new user account
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+
+  /api/auth/login:
+    post:
+      summary: User Login
+      description: Authenticate user and get JWT token
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+
+  /api/search:
+    post:
+      summary: Gift Search
+      description: |
+        Search for gifts using natural language queries with advanced filtering.
+
+        The API uses AI-powered NLP to understand the query and provide personalized
+        recommendations based on age, interests, relationships, and sentiment analysis.
+      tags:
+        - Search
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+
+  /api/recommendations:
+    post:
+      summary: Personalized Recommendations
+      description: Get AI-powered personalized gift recommendations based on user preferences
+      tags:
+        - Search
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecommendationRequest'
+      responses:
+        '200':
+          description: Personalized recommendations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecommendationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+
+  /api/compare:
+    post:
+      summary: Price Comparison
+      description: Compare prices for a product across different retailers
+      tags:
+        - Commerce
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompareRequest'
+      responses:
+        '200':
+          description: Price comparison results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompareResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+
+  /api/categories:
+    get:
+      summary: Gift Categories
+      description: Get list of available gift categories
+      tags:
+        - Reference
+      responses:
+        '200':
+          description: Categories list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoriesResponse'
+
+  /api/filters:
+    get:
+      summary: Filter Options
+      description: Get available filter options for age ranges and price ranges
+      tags:
+        - Reference
+      responses:
+        '200':
+          description: Filter options
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FiltersResponse'
+
+  /api/assets/list:
+    get:
+      summary: Asset List
+      description: Get list of available assets (images, 3D models) with metadata
+      tags:
+        - Assets
+      responses:
+        '200':
+          description: Asset list with metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetListResponse'
+
+  /api/assets/images/{filename}:
+    get:
+      summary: Get Image Asset
+      description: Serve image assets with caching headers
+      tags:
+        - Assets
+      parameters:
+        - name: filename
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Image filename
+          example: hero-bg-01.jpg
+      responses:
+        '200':
+          description: Image file
+          content:
+            image/*:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Asset not found
+
+  /api/assets/3d/{filename}:
+    get:
+      summary: Get 3D Model Asset
+      description: Serve 3D model assets with caching headers
+      tags:
+        - Assets
+      parameters:
+        - name: filename
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 3D model filename
+          example: christmas_gifts.glb
+      responses:
+        '200':
+          description: 3D model file
+          content:
+            model/*:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Asset not found
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+          example: healthy
+        timestamp:
+          type: string
+          format: date-time
+        services:
+          type: object
+          properties:
+            database:
+              type: string
+              enum: [healthy, unhealthy]
+            redis:
+              type: string
+              enum: [healthy, unhealthy, not_configured]
+            nlp:
+              type: string
+              enum: [healthy, unhealthy, degraded]
+        system:
+          type: object
+          properties:
+            cpu_percent:
+              type: number
+              example: 15.2
+            memory_percent:
+              type: number
+              example: 45.8
+            memory_used_mb:
+              type: number
+              example: 1024.5
+            disk_usage_percent:
+              type: number
+              example: 67.3
+
+    MetricsResponse:
+      type: object
+      properties:
+        requests:
+          type: object
+          properties:
+            total:
+              type: integer
+            status_200:
+              type: integer
+            status_400:
+              type: integer
+            status_401:
+              type: integer
+            status_429:
+              type: integer
+            status_500:
+              type: integer
+        errors:
+          type: object
+          additionalProperties:
+            type: integer
+        performance:
+          type: object
+          properties:
+            avg_response_time:
+              type: number
+            total_requests:
+              type: integer
+        cache:
+          type: object
+          properties:
+            hits:
+              type: integer
+            misses:
+              type: integer
+            hit_rate:
+              type: number
+        system:
+          $ref: '#/components/schemas/HealthResponse/properties/system'
+
+    UserRegistration:
+      type: object
+      required:
+        - username
+        - email
+        - password
+      properties:
+        username:
+          type: string
+          minLength: 3
+          maxLength: 80
+          example: johndoe
+        email:
+          type: string
+          format: email
+          example: john@example.com
+        password:
+          type: string
+          minLength: 8
+          example: securepassword123
+
+    UserLogin:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: johndoe
+        password:
+          type: string
+          example: securepassword123
+
+    AuthResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
+        user:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+            username:
+              type: string
+              example: johndoe
+            email:
+              type: string
+              example: john@example.com
+        success:
+          type: boolean
+          example: true
+
+    SearchRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          example: "birthday gift for 10 year old boy who loves dinosaurs"
+        filters:
+          type: object
+          properties:
+            age_min:
+              type: integer
+              minimum: 0
+              maximum: 100
+              example: 8
+            age_max:
+              type: integer
+              minimum: 0
+              maximum: 100
+              example: 12
+            price_min:
+              type: number
+              minimum: 0
+              example: 20.00
+            price_max:
+              type: number
+              minimum: 0
+              example: 100.00
+            categories:
+              type: array
+              items:
+                type: string
+              example: ["toys", "books"]
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 50
+          default: 10
+          example: 20
+
+    SearchResponse:
+      type: object
+      properties:
+        query_analysis:
+          type: object
+          properties:
+            age:
+              type: integer
+              nullable: true
+              example: 10
+            relationship:
+              type: string
+              nullable: true
+              example: "son"
+            interests:
+              type: array
+              items:
+                type: string
+              example: ["dinosaurs", "science"]
+            sentiment:
+              type: object
+              properties:
+                compound:
+                  type: number
+                  example: 0.8
+                pos:
+                  type: number
+                  example: 0.6
+                neu:
+                  type: number
+                  example: 0.3
+                neg:
+                  type: number
+                  example: 0.1
+        recommendations:
+          type: array
+          items:
+            $ref: '#/components/schemas/GiftRecommendation'
+        total_results:
+          type: integer
+          example: 25
+        filters_applied:
+          type: object
+          properties:
+            age_range:
+              type: object
+              properties:
+                min:
+                  type: integer
+                  nullable: true
+                max:
+                  type: integer
+                  nullable: true
+            price_range:
+              type: object
+              properties:
+                min:
+                  type: number
+                  nullable: true
+                max:
+                  type: number
+                  nullable: true
+            categories:
+              type: array
+              items:
+                type: string
+        success:
+          type: boolean
+          example: true
+
+    GiftRecommendation:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Dinosaur Fossil Dig Kit"
+        description:
+          type: string
+          example: "Exciting archaeological adventure for young paleontologists"
+        category:
+          type: string
+          example: "science"
+        age_min:
+          type: integer
+          example: 6
+        age_max:
+          type: integer
+          example: 12
+        image:
+          type: string
+          format: uri
+          example: "/api/assets/images/hero-bg-01.jpg"
+        prices:
+          type: array
+          items:
+            type: object
+            properties:
+              retailer:
+                type: string
+                example: "Amazon"
+              price:
+                type: number
+                example: 29.99
+        rating:
+          type: number
+          minimum: 0
+          maximum: 5
+          example: 4.5
+        relevance_score:
+          type: number
+          example: 95.2
+
+    RecommendationRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          example: "gift for my teenage son who plays video games"
+
+    RecommendationResponse:
+      type: object
+      properties:
+        query_analysis:
+          $ref: '#/components/schemas/SearchResponse/properties/query_analysis'
+        recommendations:
+          type: array
+          items:
+            $ref: '#/components/schemas/GiftRecommendation'
+        personalized:
+          type: boolean
+          example: true
+        success:
+          type: boolean
+          example: true
+
+    CompareRequest:
+      type: object
+      required:
+        - product_name
+      properties:
+        product_name:
+          type: string
+          example: "LEGO Creator Set"
+
+    CompareResponse:
+      type: object
+      properties:
+        prices:
+          type: array
+          items:
+            type: object
+            properties:
+              retailer:
+                type: string
+                example: "Amazon"
+              price:
+                type: number
+                example: 49.99
+        success:
+          type: boolean
+          example: true
+
+    CategoriesResponse:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "toys"
+        success:
+          type: boolean
+          example: true
+
+    FiltersResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        filters:
+          type: object
+          properties:
+            ages:
+              type: array
+              items:
+                type: integer
+              example: [0, 5, 12, 18, 100]
+            prices:
+              type: array
+              items:
+                type: integer
+              example: [0, 50, 100, 500]
+
+    AssetListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        assets:
+          type: object
+          properties:
+            images:
+              type: array
+              items:
+                type: object
+                properties:
+                  filename:
+                    type: string
+                    example: "hero-bg-01.jpg"
+                  type:
+                    type: string
+                    example: "image"
+                  size:
+                    type: integer
+                    example: 2048576
+                  modified:
+                    type: number
+                    example: 1640995200.0
+                  url:
+                    type: string
+                    example: "/api/assets/images/hero-bg-01.jpg"
+            models_3d:
+              type: array
+              items:
+                type: object
+                properties:
+                  filename:
+                    type: string
+                    example: "christmas_gifts.glb"
+                  type:
+                    type: string
+                    example: "3d_model"
+                  size:
+                    type: integer
+                    example: 10485760
+                  modified:
+                    type: number
+                    example: 1640995200.0
+                  url:
+                    type: string
+                    example: "/api/assets/3d/christmas_gifts.glb"
+
+  responses:
+    BadRequest:
+      description: Bad request - invalid input data
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "query is required"
+              success:
+                type: boolean
+                example: false
+
+    Unauthorized:
+      description: Authentication required or invalid credentials
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "Invalid username or password"
+              success:
+                type: boolean
+                example: false
+
+    RateLimited:
+      description: Too many requests - rate limit exceeded
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "Rate limit exceeded"
+              success:
+                type: boolean
+                example: false
+
+tags:
+  - name: General
+    description: General API endpoints
+  - name: Authentication
+    description: User authentication and registration
+  - name: Search
+    description: Gift search and recommendation endpoints
+  - name: Commerce
+    description: Price comparison and shopping features
+  - name: Reference
+    description: Reference data and filter options
+  - name: Assets
+    description: Static asset serving
+  - name: Monitoring
+    description: Health checks and metrics

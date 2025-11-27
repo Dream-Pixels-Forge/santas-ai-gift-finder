@@ -1,0 +1,215 @@
+/**
+ * Base styles for Santa's AI Gift Finder
+ * Global styles and utility classes
+ */
+
+/* Reset and base styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%; /* Prevent iOS text size adjustment */
+  text-size-adjust: 100%; /* Standard property */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  /* iOS momentum scrolling */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+  body {
+    /* iOS viewport fix */
+    min-height: -webkit-fill-available;
+  }
+}
+
+/* Utility classes */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Focus styles for accessibility */
+:focus {
+  outline: 2px solid #667eea; /* Fallback for CSS variables */
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
+/* Focus visible for better keyboard navigation support */
+:focus-visible {
+  outline: 2px solid #667eea; /* Fallback */
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
+/* Remove outline for mouse users when focus-visible is supported */
+@supports selector(:focus-visible) {
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+/* Fallback for browsers that don't support :focus-visible */
+@supports not selector(:focus-visible) {
+  /* Add a class-based fallback using JavaScript */
+  .js-focus-visible :focus:not(.focus-visible) {
+    outline: none;
+  }
+}
+
+/* Skip link for keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  padding: var(--spacing-sm);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  z-index: 100;
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Loading states */
+.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Error states */
+.error-message {
+  color: var(--color-error);
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-md);
+  margin-top: var(--spacing-md);
+  font-size: 14px;
+}
+
+.error-banner {
+  color: var(--color-error);
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-lg);
+  margin: var(--spacing-lg) auto;
+  max-width: 600px;
+  font-weight: bold;
+}
+
+/* Responsive container */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+}
+
+/* Grid layout for gift cards */
+.gift-grid {
+  /* Flexbox fallback for older browsers */
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+  margin: var(--spacing-lg) 0;
+}
+
+/* Modern Grid implementation for supported browsers */
+@supports (display: grid) {
+  .gift-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    /* Safari WebKit specific grid fixes */
+    display: -ms-grid; /* IE11 fallback */
+    display: grid;
+    -ms-grid-columns: (minmax(300px, 1fr))[auto-fit];
+  }
+}
+
+/* Safari WebKit specific animation fixes */
+@-webkit-keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@-webkit-keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Responsive breakpoints */
+@media (max-width: 768px) {
+  .container {
+    padding: var(--spacing-md);
+    padding: 1rem; /* Fallback for browsers without CSS variables */
+  }
+  
+  .gift-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+    gap: 1rem; /* Fallback */
+  }
+  
+  /* Flexbox fallback for mobile */
+  .gift-grid {
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .gift-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  /* Flexbox fallback for tablet */
+  .gift-grid {
+    flex-direction: row;
+  }
+  
+  .gift-grid > * {
+    flex: 0 0 calc(50% - 0.75rem); /* Account for gap */
+  }
+}
+
+@media (min-width: 1025px) {
+  .gift-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  /* Flexbox fallback for desktop */
+  .gift-grid > * {
+    flex: 0 0 calc(33.333% - 1rem); /* Account for gap */
+  }
+}
