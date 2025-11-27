@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import SearchForm from './components/SearchForm';
-import ResultsList from './components/ResultsList';
-import Filters from './components/Filters';
+import ResultsList from './ResultList';
+import Filters from './Filters';
 import { FaSnowflake } from 'react-icons/fa';
 import './App.css';
 

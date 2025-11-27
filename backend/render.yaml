@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: santas-ai-gift-finder-backend
+    env: python
+    region: oregon
+    buildCommand: pip install -r requirements.txt && python download_models.py
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: santas-gift-finder-db
+          property: connectionString
+      - key: REDIS_URL
+        fromDatabase:
+          name: santas-gift-finder-redis
+          property: connectionString
+databases:
+  - name: santas-gift-finder-db
+    region: oregon
+  - name: santas-gift-finder-redis
+    region: oregon
+    type: redis
