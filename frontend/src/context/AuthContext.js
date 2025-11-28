@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { getToken, getUser, setAuthData, clearAuthData, isAuthenticated } from '../utils/auth';
+import { getUser, setAuthData, clearAuthData, isAuthenticated } from '../utils/auth';
 import { sanitizeInput, isValidEmail, validatePassword } from '../utils/security';
 
 /**
