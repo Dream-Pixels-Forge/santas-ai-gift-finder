@@ -1,10 +1,10 @@
 services:
   - type: web
     name: santas-ai-gift-finder-backend
-    env: python
+    runtime: docker
     region: oregon
-    buildCommand: pip install -r requirements.txt && python download_models.py
-    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: .
     envVars:
       - key: FLASK_ENV
         value: production
@@ -18,9 +18,12 @@ services:
         fromDatabase:
           name: santas-gift-finder-redis
           property: connectionString
+      - key: JWT_SECRET_KEY
+        generateValue: true
 databases:
   - name: santas-gift-finder-db
     region: oregon
+    databaseName: santas_gift_finder
+    user: santas_user
   - name: santas-gift-finder-redis
     region: oregon
-    type: redis
