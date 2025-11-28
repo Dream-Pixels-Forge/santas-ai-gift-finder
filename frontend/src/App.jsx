@@ -1,4 +1,4 @@
-import React, { useState, useCallback, memo, useEffect } from 'react';
+import React, { useState, useCallback, memo } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import SearchForm from './components/SearchForm';
 import ResultsList from './ResultList';
@@ -6,8 +6,6 @@ import Filters from './Filters';
 import LandingPage from './components/landing/LandingPage';
 import Auth from './components/Auth/Auth';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import { FaSnowflake, FaSignOutAlt } from 'react-icons/fa';
-import frontendMonitor from './utils/monitoring';
 import './styles/main.css';
 
 /**
@@ -35,7 +33,7 @@ const AppContent = memo(() => {
   const [filters, setFilters] = useState({ price: [0, 500], age: [0, 100] });
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { user, logout, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   /**
    * Handles setting search results and clearing errors

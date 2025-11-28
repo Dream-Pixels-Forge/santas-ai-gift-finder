@@ -49,18 +49,18 @@ const Footer = () => {
             <div className="footer-section">
               <h3>Company</h3>
               <ul>
-                <li><a href="#" className="footer-link">About Us</a></li>
-                <li><a href="#" className="footer-link">Contact</a></li>
-                <li><a href="#" className="footer-link">Careers</a></li>
+                <li><button type="button" className="footer-link">About Us</button></li>
+                <li><button type="button" className="footer-link">Contact</button></li>
+                <li><button type="button" className="footer-link">Careers</button></li>
               </ul>
             </div>
 
             <div className="footer-section">
               <h3>Legal</h3>
               <ul>
-                <li><a href="#" className="footer-link">Privacy Policy</a></li>
-                <li><a href="#" className="footer-link">Terms of Service</a></li>
-                <li><a href="#" className="footer-link">Cookie Policy</a></li>
+                <li><button type="button" className="footer-link">Privacy Policy</button></li>
+                <li><button type="button" className="footer-link">Terms of Service</button></li>
+                <li><button type="button" className="footer-link">Cookie Policy</button></li>
               </ul>
             </div>
           </div>
@@ -93,15 +93,15 @@ const Footer = () => {
         <div className="footer-social">
           <h3>Follow Us</h3>
           <div className="social-links">
-            <a href="#" className="social-link" aria-label="Facebook">
+            <button type="button" className="social-link" aria-label="Facebook">
               <FaFacebook />
-            </a>
-            <a href="#" className="social-link" aria-label="Twitter">
+            </button>
+            <button type="button" className="social-link" aria-label="Twitter">
               <FaTwitter />
-            </a>
-            <a href="#" className="social-link" aria-label="Instagram">
+            </button>
+            <button type="button" className="social-link" aria-label="Instagram">
               <FaInstagram />
-            </a>
+            </button>
           </div>
         </div>
 
