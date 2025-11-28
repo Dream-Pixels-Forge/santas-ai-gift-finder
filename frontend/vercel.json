@@ -22,10 +22,5 @@
   ],
   "env": {
     "REACT_APP_API_URL": "https://santas-ai-gift-finder-backend.onrender.com/api"
-  },
-  "functions": {
-    "src/pages/api/**/*.js": {
-      "runtime": "edge"
-    }
   }
 }
