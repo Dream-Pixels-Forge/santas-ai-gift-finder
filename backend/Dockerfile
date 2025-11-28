@@ -18,12 +18,23 @@ WORKDIR /app
 # Stage 2: Dependencies and models
 FROM base AS dependencies
 
+# Install build dependencies for packages that require compilation (e.g., spaCy, blis)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        build-essential \
+        python3-dev \
+        && rm -rf /var/lib/apt/lists/*
+
 # Copy requirements first for better caching
 COPY requirements.txt .
 
-# Install Python dependencies
+# Install Python dependencies with wheel preference and error handling
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+    pip install --no-cache-dir --prefer-binary -r requirements.txt
+
+# Clean up build dependencies to reduce image size
+RUN apt-get purge -y --auto-remove build-essential python3-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Download spaCy and NLTK models
 RUN python -m spacy download en_core_web_sm && \
