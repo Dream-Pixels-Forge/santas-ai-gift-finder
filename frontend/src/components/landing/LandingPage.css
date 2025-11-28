@@ -3,6 +3,10 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  width: 100vw;
+  max-width: none;
+  margin: 0;
+  padding: 0;
 }
 
 .landing-main {
@@ -19,7 +23,8 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .landing-page {
-    /* Adjust for mobile if needed */
+    width: 100%;
+    padding: 0;
   }
 }
 

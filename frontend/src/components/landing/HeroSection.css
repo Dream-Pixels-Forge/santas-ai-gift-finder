@@ -127,6 +127,7 @@
   background: rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 }
 
 .cta-container {
@@ -255,6 +256,12 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .landing-hero-section {
+    height: auto;
+    min-height: 100vh;
+    padding-top: 70px; /* Account for fixed header */
+  }
+
   .hero-title {
     font-size: 2.5rem;
   }
